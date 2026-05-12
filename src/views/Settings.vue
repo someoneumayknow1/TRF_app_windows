@@ -93,8 +93,8 @@ export default class Settings extends Vue {
         this.$store.commit('setServerUrl', this.serverUrl)
         this.saveSuccess = true
       }
-    } catch (e: any) {
-      this.saveError = e.message || 'Failed to save'
+    } catch (e) {
+      this.saveError = (e as Error)?.message || 'Failed to save'
     } finally {
       this.saving = false
     }

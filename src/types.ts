@@ -1,15 +1,15 @@
 import toRGBA from '@/utilities/toRGBA'
 
 export interface Config {
-  apiKey?: string
-  messageSubject?: string
-  messageHTML?: string
-  advancedRaw?: { html: string; css: string }
-  analyticsEnabled?: boolean
-  currentEditor?: number
-  updatePeriodMilliseconds?: number
-  queueTime?: number
-  configVersion?: string
+  apiKey?: string;
+  messageSubject?: string;
+  messageHTML?: string;
+  advancedRaw?: { html: string; css: string };
+  analyticsEnabled?: boolean;
+  currentEditor?: number;
+  updatePeriodMilliseconds?: number;
+  queueTime?: number;
+  configVersion?: string;
 }
 
 export class DefaultConfig implements Config {
@@ -23,46 +23,46 @@ export class DefaultConfig implements Config {
 }
 
 export interface Message {
-  sentTimeMilliseconds: number
-  nation: NationAPICall.Nation
-  successful: boolean
-  error?: string
+  sentTimeMilliseconds: number;
+  nation: NationAPICall.Nation;
+  successful: boolean;
+  error?: string;
 }
 
 export namespace NationAPICall {
   export interface Nation {
-    nation_id: number
-    nation: string
-    leader: string
-    continent: number
-    war_policy: number
-    domestic_policy: number
-    color: number
-    alliance_id: number
-    alliance: string
-    alliance_position: number
-    cities: number
-    offensive_wars: number
-    defensive_wars: number
-    score: number
-    v_mode: boolean
-    v_mode_turns: number
-    beige_turns: number
-    last_active: string
-    founded: string
-    soldiers: number
-    tanks: number
-    aircraft: number
-    ships: number
-    missiles: number
-    nukes: number
+    nation_id: number;
+    nation: string;
+    leader: string;
+    continent: number;
+    war_policy: number;
+    domestic_policy: number;
+    color: number;
+    alliance_id: number;
+    alliance: string;
+    alliance_position: number;
+    cities: number;
+    offensive_wars: number;
+    defensive_wars: number;
+    score: number;
+    v_mode: boolean;
+    v_mode_turns: number;
+    beige_turns: number;
+    last_active: string;
+    founded: string;
+    soldiers: number;
+    tanks: number;
+    aircraft: number;
+    ships: number;
+    missiles: number;
+    nukes: number;
   }
 }
 
 export interface SideBarItem {
-  title: string
-  icon: string
-  path: string
+  title: string;
+  icon: string;
+  path: string;
 }
 
 export namespace VueLineChart {
@@ -81,8 +81,8 @@ export namespace VueLineChart {
   ]
 
   export interface ChartData {
-    labels: string[]
-    datasets: Dataset[]
+    labels: string[];
+    datasets: Dataset[];
   }
 
   export class ChartData implements ChartData {
@@ -91,14 +91,14 @@ export namespace VueLineChart {
   }
 
   export interface Dataset {
-    label: string
-    data: (number | string | { x: string | number; y: string | number })[]
-    lineTension: number
-    borderColor: string
-    backgroundColor: string
-    fill: boolean
-    pointHitRadius: number
-    pointRadius: number
+    label: string;
+    data: (number | string | { x: string | number; y: string | number })[];
+    lineTension: number;
+    borderColor: string;
+    backgroundColor: string;
+    fill: boolean;
+    pointHitRadius: number;
+    pointRadius: number;
   }
 
   export class Dataset implements Dataset {
@@ -114,13 +114,13 @@ export namespace VueLineChart {
 }
 
 export interface GitHubRelease {
-  url: string
-  html_url: string
-  tag_name: string
-  name: string
-  body: string
-  draft: boolean
-  prerelease: boolean
-  created_at: string
-  published_at: string
+  url: string;
+  html_url: string;
+  tag_name: string;
+  name: string;
+  body: string;
+  draft: boolean;
+  prerelease: boolean;
+  created_at: string;
+  published_at: string;
 }

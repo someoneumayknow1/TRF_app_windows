@@ -44,8 +44,8 @@ export default class Analytics extends Vue {
   async created() {
     try {
       this.analytics = await v2Api.getMyAnalytics()
-    } catch (e: any) {
-      this.error = e.message || 'Failed to load analytics'
+    } catch (e) {
+      this.error = (e as Error)?.message || 'Failed to load analytics'
     } finally {
       this.loading = false
     }

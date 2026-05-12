@@ -91,8 +91,8 @@ export default class DiscordLogin extends Vue {
       } else {
         this.error = 'Authentication failed. Please try again.'
       }
-    } catch (e: any) {
-      this.error = e.message || 'An error occurred during login.'
+    } catch (e) {
+      this.error = (e as Error)?.message || 'An error occurred during login.'
     } finally {
       this.loading = false
     }

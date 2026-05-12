@@ -25,13 +25,13 @@ contextBridge.exposeInMainWorld('electronAPI', {
 declare global {
   interface Window {
     electronAPI: {
-      getServerUrl: () => Promise<string>
-      setServerUrl: (url: string) => Promise<string>
-      getApiKey: () => Promise<string>
-      setApiKey: (apiKey: string) => Promise<void>
-      showNotification: (options: { title: string; body: string }) => void
-      openDiscordAuth: (authUrl: string) => Promise<{ success: boolean; error?: string }>
-      isElectron: boolean
-    }
+      getServerUrl: () => Promise<string>;
+      setServerUrl: (url: string) => Promise<string>;
+      getApiKey: () => Promise<string>;
+      setApiKey: (apiKey: string) => Promise<void>;
+      showNotification: (options: { title: string; body: string }) => void;
+      openDiscordAuth: (authUrl: string) => Promise<{ success: boolean; error?: string }>;
+      isElectron: boolean;
+    };
   }
 }
