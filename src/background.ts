@@ -117,6 +117,13 @@ ipcMain.on('show-notification', (_event, options: { title: string; body: string 
 // IPC: Open Discord auth window
 ipcMain.handle('open-discord-auth', async (_event, authUrl: string) => {
   return new Promise<{ success: boolean; error?: string }>((resolve) => {
+    let settled = false
+    const settle = (result: { success: boolean; error?: string }) => {
+      if (settled) return
+      settled = true
+      resolve(result)
+    }
+
     const authWindow = new BrowserWindow({
       width: 500,
       height: 700,
@@ -132,12 +139,30 @@ ipcMain.handle('open-discord-auth', async (_event, authUrl: string) => {
 
     authWindow.loadURL(authUrl)
 
-    // Detect when the OAuth flow redirects to the callback page
+    const expectedOrigin = new URL(authUrl).origin
+    const successPath = '/auth/discord/callback'
+    const loginPath = '/auth/login'
+
+    // Detect when the OAuth flow finishes on a non-auth route on the same server.
     const handleNavigation = (url: string) => {
-      if (url.includes('/auth/discord/callback')) {
-        // Auth completed - notify renderer and close window
-        authWindow.close()
-        resolve({ success: true })
+      try {
+        const current = new URL(url)
+        if (current.origin !== expectedOrigin) return
+        if (current.pathname === successPath) return
+
+        if (current.pathname === loginPath) {
+          const error = current.searchParams.get('error') || 'Authentication failed'
+          authWindow.close()
+          settle({ success: false, error })
+          return
+        }
+
+        if (!current.pathname.startsWith('/auth/')) {
+          authWindow.close()
+          settle({ success: true })
+        }
+      } catch {
+        // Ignore invalid URLs during OAuth navigation.
       }
     }
 
@@ -146,7 +171,7 @@ ipcMain.handle('open-discord-auth', async (_event, authUrl: string) => {
     authWindow.webContents.on('did-redirect-navigation', (_e, url) => handleNavigation(url))
 
     authWindow.on('closed', () => {
-      resolve({ success: false, error: 'Auth window closed' })
+      settle({ success: false, error: 'Auth window closed' })
     })
   })
 })

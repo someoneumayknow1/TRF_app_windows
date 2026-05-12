@@ -22,8 +22,8 @@ export const discordAuth = {
       if (result.success) {
         // Clear session cache so we re-fetch after auth
         sessionCache = null;
-        // Navigate to the callback route to finalize
-        window.location.href = '/auth/discord/callback';
+      } else {
+        throw new Error(result.error || 'Authentication failed');
       }
     } else {
       window.location.href = url.toString();
