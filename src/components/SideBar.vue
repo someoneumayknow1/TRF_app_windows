@@ -25,18 +25,32 @@ export default class SideBar extends Vue {
   set open(val: boolean) { this.$emit('input', val) }
 
   get isAdmin(): boolean { return this.$store.getters.isAdmin }
+  get hasClientRole(): boolean { return this.$store.getters.hasClientRole }
+  get hasMemberRole(): boolean { return this.$store.getters.hasMemberRole }
 
   get items() {
-    const base = [
-      { title: 'Dashboard', icon: 'mdi-view-dashboard', path: '/dashboard' },
-      { title: 'Message Creator', icon: 'mdi-email-edit', path: '/message-creator' },
-      { title: 'Configuration', icon: 'mdi-tune', path: '/config' },
-      { title: 'Analytics', icon: 'mdi-chart-line', path: '/analytics' },
-      { title: 'Account', icon: 'mdi-account', path: '/account' },
+    const base: Array<{ title: string; icon: string; path: string }> = []
+    if (this.hasClientRole) {
+      base.push(
+        { title: 'Dashboard', icon: 'mdi-view-dashboard', path: '/dashboard' },
+        { title: 'Automation', icon: 'mdi-robot-outline', path: '/automation' },
+        { title: 'Configuration', icon: 'mdi-tune', path: '/config' },
+        { title: 'Message Creator', icon: 'mdi-email-edit', path: '/message-creator' },
+        { title: 'Analytics', icon: 'mdi-chart-line', path: '/analytics' },
+        { title: 'Account', icon: 'mdi-account', path: '/account' },
+      )
+    }
+    if (this.hasMemberRole) {
+      base.push(
+        { title: 'Nation', icon: 'mdi-flag', path: '/nation' },
+        { title: 'Alliance', icon: 'mdi-shield-account', path: '/alliance' },
+      )
+    }
+    base.push(
       { title: 'Help', icon: 'mdi-help-circle', path: '/help' },
       { title: 'About', icon: 'mdi-information', path: '/about' },
       { title: 'Settings', icon: 'mdi-cog', path: '/settings' },
-    ]
+    )
     if (this.isAdmin) {
       base.push({ title: 'Bot Panel', icon: 'mdi-robot', path: '/bot' })
     }

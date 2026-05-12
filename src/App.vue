@@ -52,6 +52,7 @@ export default class App extends Vue {
     const session = await discordAuth.getSession()
     this.$store.commit('setDiscordAuthed', session.authenticated)
     this.$store.commit('setIsAdmin', session.isAdmin)
+    this.$store.commit('setDiscordRoles', session.roles)
     await this.$store.dispatch('loadApiKeyState')
 
     if (!session.authenticated) return

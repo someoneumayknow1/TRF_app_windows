@@ -3,6 +3,12 @@ import { resolveServerUrl, normalizeReturnTo } from '@/utilities/serverUrls';
 interface SessionData {
   authenticated: boolean;
   isAdmin: boolean;
+  roles: {
+    verified: boolean;
+    bar3Client: boolean;
+    bar3Server: boolean;
+    memberGuild: boolean;
+  };
 }
 
 let sessionCache: SessionData | null = null;
@@ -39,8 +45,8 @@ export const discordAuth = {
       });
       if (res.ok) {
         const data = await res.json();
-        const roles = Array.isArray(data?.roles) ? data.roles : [];
-        const roleBasedAdmin = roles.some((role: unknown) => {
+        const legacyRoles = Array.isArray(data?.roles) ? data.roles : [];
+        const roleBasedAdmin = legacyRoles.some((role: unknown) => {
           if (typeof role === 'string') return role.toLowerCase() === 'admin';
           if (role && typeof role === 'object' && 'name' in role) {
             const name = (role as { name?: unknown }).name;
@@ -48,15 +54,32 @@ export const discordAuth = {
           }
           return false;
         });
+        const rolesPayload = data?.roles && typeof data.roles === 'object'
+          ? data.roles
+          : {};
         sessionCache = {
           authenticated: data?.authenticated === true,
           isAdmin: data?.isAdmin === true || roleBasedAdmin,
+          roles: {
+            verified: rolesPayload.verified === true,
+            bar3Client: rolesPayload.bar3_client === true,
+            bar3Server: rolesPayload.bar3_server === true,
+            memberGuild: rolesPayload.member_guild === true,
+          },
         };
       } else {
-        sessionCache = { authenticated: false, isAdmin: false };
+        sessionCache = {
+          authenticated: false,
+          isAdmin: false,
+          roles: { verified: false, bar3Client: false, bar3Server: false, memberGuild: false },
+        };
       }
     } catch {
-      sessionCache = { authenticated: false, isAdmin: false };
+      sessionCache = {
+        authenticated: false,
+        isAdmin: false,
+        roles: { verified: false, bar3Client: false, bar3Server: false, memberGuild: false },
+      };
     }
     return sessionCache;
   },
